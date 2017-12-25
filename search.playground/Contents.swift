@@ -69,6 +69,9 @@ func fetchItems(matching query: [String: String], completion: @escaping ([StoreI
             let items = resultsArray.flatMap { StoreItems(json: $0)}
             
             completion(items)
+        } else {
+            print("no data was returned, or data was not serialized")
+            completion(nil)
         }
     }
         
@@ -81,10 +84,11 @@ let query: [String: String] = [
     "lang": "en_us",
     "limit": "10"
 ]
+
 fetchItems(matching: query) { (items) in
-    
     if let items = items {
         print("num items: \(items.count)")
+    } else {
+        print("nothin received")
     }
-    
 }
