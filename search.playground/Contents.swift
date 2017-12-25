@@ -7,7 +7,7 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
-struct StoreItems: Codable {
+struct StoreItems {
     var kind: String
     
 
@@ -46,8 +46,6 @@ let searchURL = baseURL?.withQueries(queryDict)!
 // print(searchURL)
 
 let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
-    
-    let jsonDecoder = JSONDecoder()
     
     if let data = data,
         let rawJSON = try? JSONSerialization.jsonObject(with: data),
