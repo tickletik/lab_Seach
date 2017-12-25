@@ -7,52 +7,17 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
-struct StoreInfo: Codable {
+struct StoreItems: Codable {
     var kind: String
     
-    enum CodingKeys: String, CodingKey {
-        case kind
-    }
-    
-    init(from decoder: Decoder) throws {
-        let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
+
+    init?(json: [String: Any]) {
+        guard let kind = json["kind"] as? String else { return nil }
         
-        self.kind = try valueContainer.decode(String.self, forKey: CodingKeys.kind)
+        self.kind = kind
     }
 }
 
-
-/*
-struct StoreItem: Codable {
-    var kind: String
-    /*
-    var trackId: Int
-    var artistName: String
-    var trackName: String
-    //var previewURL: URL
-    var shortDescription: String
-    var longDescription: String
-    //var hasITunesExtras: Bool
-    */
-    
-    enum CodingKeys: String, CodingKey {
-        case kind
-        case trackId
-        case artistName
-        case trackName
-        //case previewURL
-        case shortDescription
-        case longDescription
-        //case hasITunesExtras
-    }
- 
-    init(from decoder: Decoder) throws {
-        let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
-        
-        self.kind = try valueContainer.decode(String.self, forKey: CodingKeys.kind)
-    }
-}
-*/
 
 extension URL {
     func withQueries(_ queries: [String: String]) -> URL? {
@@ -78,21 +43,28 @@ let queryDict: [String: String] = [
 ]
 
 let searchURL = baseURL?.withQueries(queryDict)!
+// print(searchURL)
 
 let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
-    
     
     let jsonDecoder = JSONDecoder()
     
     if let data = data,
-        let string = String(data: data, encoding: .utf8),
-        let info = try? jsonDecoder.decode(StoreInfo.self, from: data) {
-     
-        print(string)
-        print(info)
+        let rawJSON = try? JSONSerialization.jsonObject(with: data),
+        let json = rawJSON as? [String: Any],
+        let resultsArray = json["results"] as? [[String: Any]] {
         
-        PlaygroundPage.current.finishExecution()
+        //print("\n\nrawJSON: \(rawJSON)\n\n")
+        //print("\n\njson: \(json)\n\n")
+        //print("\n\nresultsArray: \(resultsArray)")
+        
+        let items = resultsArray.flatMap { StoreItems(json: $0)}
+        
+        print("num items: \(items)")
+        for item in items {
+            print(item)
+        }
     }
 }
-
+    
 task.resume()
