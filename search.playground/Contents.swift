@@ -7,6 +7,17 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
+struct StoreItem {
+    var kind: String
+    var trackId: Int
+    var artistName: String
+    var trackName: String
+    var previewURL: URL
+    var shortDescription: String
+    var longDescription: String
+    var hasITunesExtras: Bool
+}
+
 extension URL {
     func withQueries(_ queries: [String: String]) -> URL? {
         /// returns a properly formed url with all the additions
