@@ -7,16 +7,52 @@ import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
-struct StoreItem {
+struct StoreInfo: Codable {
     var kind: String
+    
+    enum CodingKeys: String, CodingKey {
+        case kind
+    }
+    
+    init(from decoder: Decoder) throws {
+        let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.kind = try valueContainer.decode(String.self, forKey: CodingKeys.kind)
+    }
+}
+
+
+/*
+struct StoreItem: Codable {
+    var kind: String
+    /*
     var trackId: Int
     var artistName: String
     var trackName: String
-    var previewURL: URL
+    //var previewURL: URL
     var shortDescription: String
     var longDescription: String
-    var hasITunesExtras: Bool
+    //var hasITunesExtras: Bool
+    */
+    
+    enum CodingKeys: String, CodingKey {
+        case kind
+        case trackId
+        case artistName
+        case trackName
+        //case previewURL
+        case shortDescription
+        case longDescription
+        //case hasITunesExtras
+    }
+ 
+    init(from decoder: Decoder) throws {
+        let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.kind = try valueContainer.decode(String.self, forKey: CodingKeys.kind)
+    }
 }
+*/
 
 extension URL {
     func withQueries(_ queries: [String: String]) -> URL? {
@@ -43,12 +79,20 @@ let queryDict: [String: String] = [
 
 let searchURL = baseURL?.withQueries(queryDict)!
 
-print(searchURL)
-
-URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
+let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
+    
+    
+    let jsonDecoder = JSONDecoder()
+    
     if let data = data,
-        let string = String(data: data, encoding: .utf8) {
+        let string = String(data: data, encoding: .utf8),
+        let info = try? jsonDecoder.decode(StoreInfo.self, from: data) {
+     
         print(string)
+        print(info)
+        
         PlaygroundPage.current.finishExecution()
     }
-    }.resume()
+}
+
+task.resume()
