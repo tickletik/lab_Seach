@@ -28,6 +28,8 @@ struct StoreItems {
         self.artist = artist
         self.artworkURL = artworkURL
 
+        self.description = json["description"] as? String ?? json["longDescription"] as? String ?? ""
+
     }
 }
 
