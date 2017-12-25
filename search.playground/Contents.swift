@@ -60,7 +60,7 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
         
         let items = resultsArray.flatMap { StoreItems(json: $0)}
         
-        print("num items: \(items)")
+        print("num items: \(items.count)")
         for item in items {
             print(item)
         }
