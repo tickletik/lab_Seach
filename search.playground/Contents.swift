@@ -48,36 +48,38 @@ extension URL {
     }
 }
 
-let baseURL = URL(string: "https://itunes.apple.com/search?")
+func fetchItems() {
+    let baseURL = URL(string: "https://itunes.apple.com/search?")
 
-let queryDict: [String: String] = [
-    "term": "Inside Out 2015",
-    "media": "movie",
-    "lang": "en_us",
-    "limit": "10"
-]
+    let queryDict: [String: String] = [
+        "term": "Inside Out 2015",
+        "media": "movie",
+        "lang": "en_us",
+        "limit": "10"
+    ]
 
-let searchURL = baseURL?.withQueries(queryDict)!
-// print(searchURL)
+    let searchURL = baseURL?.withQueries(queryDict)!
+    // print(searchURL)
 
-let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
-    
-    if let data = data,
-        let rawJSON = try? JSONSerialization.jsonObject(with: data),
-        let json = rawJSON as? [String: Any],
-        let resultsArray = json["results"] as? [[String: Any]] {
+    let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
         
-        //print("\n\nrawJSON: \(rawJSON)\n\n")
-        //print("\n\njson: \(json)\n\n")
-        //print("\n\nresultsArray: \(resultsArray)")
-        
-        let items = resultsArray.flatMap { StoreItems(json: $0)}
-        
-        print("num items: \(items.count)")
-        for item in items {
-            print(item)
+        if let data = data,
+            let rawJSON = try? JSONSerialization.jsonObject(with: data),
+            let json = rawJSON as? [String: Any],
+            let resultsArray = json["results"] as? [[String: Any]] {
+            
+            //print("\n\nrawJSON: \(rawJSON)\n\n")
+            //print("\n\njson: \(json)\n\n")
+            //print("\n\nresultsArray: \(resultsArray)")
+            
+            let items = resultsArray.flatMap { StoreItems(json: $0)}
+            
+            print("num items: \(items.count)")
+            for item in items {
+                print(item)
+            }
         }
     }
+        
+    task.resume()
 }
-    
-task.resume()
