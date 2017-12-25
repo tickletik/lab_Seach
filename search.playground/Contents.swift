@@ -48,7 +48,7 @@ extension URL {
     }
 }
 
-func fetchItems(matching query: [String: String]) {
+func fetchItems(matching query: [String: String], completion: @escaping ([StoreItems]?) -> Void ) {
     let baseURL = URL(string: "https://itunes.apple.com/search?")
 
 
@@ -68,10 +68,7 @@ func fetchItems(matching query: [String: String]) {
             
             let items = resultsArray.flatMap { StoreItems(json: $0)}
             
-            print("num items: \(items.count)")
-            for item in items {
-                print(item)
-            }
+            completion(items)
         }
     }
         
@@ -84,4 +81,10 @@ let query: [String: String] = [
     "lang": "en_us",
     "limit": "10"
 ]
-fetchItems(matching: query)
+fetchItems(matching: query) { (items) in
+    
+    if let items = items {
+        print("num items: \(items.count)")
+    }
+    
+}
