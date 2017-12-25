@@ -1,0 +1,20 @@
+"wrapperType":
+ "kind":
+ "trackId":999607190, "artistName":
+ "trackName":
+ "trackCensoredName":
+ "trackViewUrl": 
+"previewUrl":
+ "artworkUrl30":
+ "artworkUrl60":
+ "artworkUrl100":
+ "collectionPrice":14.99, "trackPrice":14.99, "trackRentalPrice":2.99000, "collectionHdPrice":14.99000, "trackHdPrice":14.99000, "trackHdRentalPrice":3.99000, "releaseDate":
+ "collectionExplicitness":
+ "trackExplicitness":
+ "trackTimeMillis":5705413, "country":
+ "currency":
+ "primaryGenreName":
+ "contentAdvisoryRating":
+ "shortDescription": 
+"longDescription":
+ "hasITunesExtras":true
