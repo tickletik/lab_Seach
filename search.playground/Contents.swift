@@ -48,17 +48,11 @@ extension URL {
     }
 }
 
-func fetchItems() {
+func fetchItems(matching query: [String: String]) {
     let baseURL = URL(string: "https://itunes.apple.com/search?")
 
-    let queryDict: [String: String] = [
-        "term": "Inside Out 2015",
-        "media": "movie",
-        "lang": "en_us",
-        "limit": "10"
-    ]
 
-    let searchURL = baseURL?.withQueries(queryDict)!
+    let searchURL = baseURL?.withQueries(query)!
     // print(searchURL)
 
     let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error) in
@@ -83,3 +77,11 @@ func fetchItems() {
         
     task.resume()
 }
+
+let query: [String: String] = [
+    "term": "Inside Out 2015",
+    "media": "movie",
+    "lang": "en_us",
+    "limit": "10"
+]
+fetchItems(matching: query)
