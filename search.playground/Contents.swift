@@ -8,13 +8,26 @@ import PlaygroundSupport
 PlaygroundPage.current.needsIndefiniteExecution = true
 
 struct StoreItems {
+    
+    var name: String
+    var artist: String
+    var description: String
     var kind: String
+    var artworkURL: URL
     
 
     init?(json: [String: Any]) {
-        guard let kind = json["kind"] as? String else { return nil }
+        guard let kind = json["kind"] as? String,
+            let name = json["trackName"] as? String,
+            let artist = json["artistName"] as? String,
+            let artworkURLString = json["artworkUrl100"] as? String,
+            let artworkURL = URL(string: artworkURLString) else { return nil }
         
         self.kind = kind
+        self.name = name
+        self.artist = artist
+        self.artworkURL = artworkURL
+
     }
 }
 
