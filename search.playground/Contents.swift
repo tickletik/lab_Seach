@@ -5,7 +5,7 @@
 import UIKit
 import PlaygroundSupport
 
-PlaygroundPage.current.needsIndefiniteExecution = true
+//PlaygroundPage.current.needsIndefiniteExecution = true
 
 struct StoreItems: Codable {
     var name: String
@@ -100,5 +100,7 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
         print("hi")
     }
 }
-    
-task.resume()
+
+func fetchItems(matching query: [String: String]) {}
+
+//task.resume()
