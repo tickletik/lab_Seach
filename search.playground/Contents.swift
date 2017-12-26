@@ -7,7 +7,7 @@ import PlaygroundSupport
 
 //PlaygroundPage.current.needsIndefiniteExecution = true
 
-struct StoreItems: Codable {
+struct StoreItem: Codable {
     var name: String
     var artist: String
     var kind: String
@@ -101,6 +101,6 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
     }
 }
 
-func fetchItems(matching query: [String: String], completion: @escaping ([StoreItems]?) -> Void) {}
+func fetchItems(matching query: [String: String], completion: @escaping ([StoreItem]?) -> Void) {}
 
 //task.resume()
