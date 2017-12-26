@@ -101,6 +101,6 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
     }
 }
 
-func fetchItems(matching query: [String: String]) {}
+func fetchItems(matching query: [String: String], completion: @escaping ([StoreItems]?) -> Void) {}
 
 //task.resume()
