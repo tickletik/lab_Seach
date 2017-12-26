@@ -7,6 +7,22 @@ import PlaygroundSupport
 
 //PlaygroundPage.current.needsIndefiniteExecution = true
 
+
+struct StoreItems: Codable {
+    let results: [StoreItem]
+    
+    enum CodingKeys: String, CodingKey {
+        case results
+    }
+    
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        results = try values.decode([StoreItem].self, forKey: CodingKeys.results)
+    }
+}
+
 struct StoreItem: Codable {
     var name: String
     var artist: String
