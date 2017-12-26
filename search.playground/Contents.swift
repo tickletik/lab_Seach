@@ -13,13 +13,14 @@ struct StoreItems: Codable {
     var kind: String
     var artworkURL: URL?
     
-    var description
+    var description: String
     
     enum CodingKeys: String, CodingKey {
         case name = "trackName"
         case artist = "artistName"
         case kind
         case artworkURL = "artistUrl100"
+        case description
     }
     
     enum AdditionalKeys: String, CodingKey {
@@ -30,16 +31,16 @@ struct StoreItems: Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
     
         name = try values.decode(String.self, forKey: CodingKeys.name)
-        artist = try values.decode(String.self, forKey: CodingKeys.name)
-        kind = try values.decode(String.self, forKey: CodingKeys.name)
-        artworkURL = try values.decode(String.self, forKey: CodingKeys.name)
+        artist = try values.decode(String.self, forKey: CodingKeys.artist)
+        kind = try values.decode(String.self, forKey: CodingKeys.kind)
+        artworkURL = try values.decode(URL.self, forKey: CodingKeys.artworkURL)
 
         if let description = try? values.decode(String.self, forKey: CodingKeys.description) {
             self.description = description
         } else {
             let additionalValues = try decoder.container(keyedBy: AdditionalKeys.self)
 
-            description = (try? additionalValues.decode(String.self, forKey: AdditionalKeys.longDescription)) ?? ""
+            self.description = (try? additionalValues.decode(String.self, forKey: AdditionalKeys.longDescription)) ?? ""
         }
     }
     
@@ -54,6 +55,7 @@ struct StoreItems: Codable {
         self.kind = kind
         self.name = name
         self.artist = artist
+        self.description = "no description code for init(json)"
         
         if let artworkURL = URL(string: artworkURLString) {
             self.artworkURL = artworkURL
