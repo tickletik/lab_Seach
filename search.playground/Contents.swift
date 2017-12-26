@@ -5,7 +5,7 @@
 import UIKit
 import PlaygroundSupport
 
-//PlaygroundPage.current.needsIndefiniteExecution = true
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 
 struct StoreItems: Codable {
@@ -14,7 +14,6 @@ struct StoreItems: Codable {
     enum CodingKeys: String, CodingKey {
         case results
     }
-    
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -112,11 +111,17 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
     
     let jsonDecoder = JSONDecoder()
     
-    if let data = data {
+    print("in task")
+    if let data = data,
+        let rawJSON = try? JSONSerialization.jsonObject(with: data) {
+        print(rawJSON)
+        if let storeItems = try? jsonDecoder.decode(StoreItems.self, from: data) {
+            print("got store items")
+        }
         print("hi")
     }
 }
 
 func fetchItems(matching query: [String: String], completion: @escaping ([StoreItem]?) -> Void) {}
 
-//task.resume()
+task.resume()
