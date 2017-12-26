@@ -8,13 +8,30 @@ import PlaygroundSupport
 PlaygroundPage.current.needsIndefiniteExecution = true
 
 struct StoreItems: Codable {
+    var name: String
+    var artist: String
     var kind: String
+    var artworkURL: URL?
+    
+    
     
 
     init?(json: [String: Any]) {
-        guard let kind = json["kind"] as? String else { return nil }
+        guard let kind = json["kind"] as? String,
+            let name = json["trackName"] as? String,
+            let artist = json["artistName"] as? String,
+            let artworkURLString = json["artworkUrl100"] as? String
+                else { return nil }
         
         self.kind = kind
+        self.name = name
+        self.artist = artist
+        
+        if let artworkURL = URL(string: artworkURLString) {
+            self.artworkURL = artworkURL
+        } else {
+            self.artworkURL = nil
+        }
     }
 }
 
@@ -49,21 +66,8 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
     
     let jsonDecoder = JSONDecoder()
     
-    if let data = data,
-        let rawJSON = try? JSONSerialization.jsonObject(with: data),
-        let json = rawJSON as? [String: Any],
-        let resultsArray = json["results"] as? [[String: Any]] {
-        
-        //print("\n\nrawJSON: \(rawJSON)\n\n")
-        //print("\n\njson: \(json)\n\n")
-        //print("\n\nresultsArray: \(resultsArray)")
-        
-        let items = resultsArray.flatMap { StoreItems(json: $0)}
-        
-        print("num items: \(items)")
-        for item in items {
-            print(item)
-        }
+    if let data = data {
+        print("hi")
     }
 }
     
