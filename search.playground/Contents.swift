@@ -33,22 +33,30 @@ struct StoreItem: Codable {
     enum CodingKeys: String, CodingKey {
         case name = "trackName"
         case artist = "artistName"
-        case kind
-        case artworkURL = "artistUrl100"
-        case description
+        case kind = "kind" // this was blank and needed to be set
+        case artworkURL = "artworkUrl100"
+        case description = "longDescription" // this also needed to be set
     }
     
     enum AdditionalKeys: String, CodingKey {
         case longDescription
     }
     
-    init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws
+    {
+        print("calling decoder")
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
     
         name = try values.decode(String.self, forKey: CodingKeys.name)
+        print(name)
         artist = try values.decode(String.self, forKey: CodingKeys.artist)
+        print(artist)
         kind = try values.decode(String.self, forKey: CodingKeys.kind)
+        print(kind)
         artworkURL = try values.decode(URL.self, forKey: CodingKeys.artworkURL)
+        print(artworkURL?.absoluteString ?? "ddfdd")
+        
 
         if let description = try? values.decode(String.self, forKey: CodingKeys.description) {
             self.description = description
@@ -57,15 +65,23 @@ struct StoreItem: Codable {
 
             self.description = (try? additionalValues.decode(String.self, forKey: AdditionalKeys.longDescription)) ?? ""
         }
+        
+        print(self.description)
     }
     
 
-    init?(json: [String: Any]) {
+    init?(json: [String: Any])
+    {
+        print("init json \(json)")
+        
         guard let kind = json["kind"] as? String,
             let name = json["trackName"] as? String,
             let artist = json["artistName"] as? String,
             let artworkURLString = json["artworkUrl100"] as? String
                 else { return nil }
+        
+        print("not nil!!")
+        
         
         self.kind = kind
         self.name = name
@@ -112,13 +128,16 @@ let task = URLSession.shared.dataTask(with: searchURL!) { (data, response, error
     let jsonDecoder = JSONDecoder()
     
     print("in task")
+    
     if let data = data,
         let rawJSON = try? JSONSerialization.jsonObject(with: data) {
         print(rawJSON)
+        
         if let storeItems = try? jsonDecoder.decode(StoreItems.self, from: data) {
             print("got store items")
         }
         print("hi")
+        
     }
 }
 
